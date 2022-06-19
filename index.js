@@ -8,6 +8,9 @@ c.fillRect(0, 0, canvas.width, canvas.height)
 
 const gravity = 0.7
 
+const movementSpeed = 2
+const jumpSpeed = 20
+
 class Sprite {
     constructor({ position, velocity }) {
         this.position = position
@@ -88,15 +91,15 @@ function animate() {
     enemy.velocity.x = 0
 
     if (keys.a.pressed && player.lastKey === 'a') {
-        player.velocity.x = -1
+        player.velocity.x = -movementSpeed
     } else if (keys.d.pressed && player.lastKey === 'd') {
-        player.velocity.x = 1
+        player.velocity.x = movementSpeed
     }
 
     if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-        enemy.velocity.x = -1
+        enemy.velocity.x = -movementSpeed
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-        enemy.velocity.x = 1
+        enemy.velocity.x = movementSpeed
     }
 
 }
@@ -115,7 +118,7 @@ window.addEventListener('keydown', (ev) => {
             break;
         case 'w':
             if (player.isJumping == false) {
-                player.velocity.y = -20
+                player.velocity.y = -jumpSpeed
             }
             break;
         case 'ArrowLeft':
@@ -128,7 +131,7 @@ window.addEventListener('keydown', (ev) => {
             break;
         case 'ArrowUp':
             if (enemy.isJumping == false) {
-                enemy.velocity.y = -20
+                enemy.velocity.y = -jumpSpeed
             }
             break;
 
