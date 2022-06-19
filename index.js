@@ -11,6 +11,8 @@ const gravity = 0.7
 const movementSpeed = 2
 const jumpSpeed = 20
 
+const hitDamage = 10
+
 class Sprite {
     constructor({ position, velocity, color = 'red', offset }) {
         this.position = position
@@ -21,6 +23,7 @@ class Sprite {
         this.isJumping
         this.color = color
         this.isAttacking = false
+        this.health = 100
         this.attackBox = {
             position: {
                 x: this.position.x,
@@ -150,13 +153,17 @@ function animate() {
     if (player.isAttacking &&
         detectCollisionBetweenRectangles({ rect1: player.attackBox, rect2: enemy })
     ) {
-        console.log('Player Collision...')
+        player.isAttacking = false
+        enemy.health -= hitDamage
+        document.getElementById('enemy-health').style.width = `${enemy.health}%`
     }
 
     if (enemy.isAttacking &&
         detectCollisionBetweenRectangles({ rect1: enemy.attackBox, rect2: player })
     ) {
-        console.log('Enemy Collision...')
+        enemy.isAttacking = false
+        player.health -= hitDamage
+        document.getElementById('player-health').style.width = `${player.health}%`
     }
 
 }

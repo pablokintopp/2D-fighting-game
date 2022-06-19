@@ -1,6 +1,7 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,12 +20,65 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .container-health-bar {
+      position: absolute;
+      display: flex;
+      width: 100%;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .health-bar {
+      background-color: yellow;
+      height: 30px;
+      width: 100%;
+      position: relative;
+    }
+
+    .health-bar-status {
+      background-color: blue;
+      height: 30px;
+      width: 100%;
+      position: absolute;
+    }
+
+    .timer {
+      background-color: yellowgreen;
+      height: 100px;
+      width: 100px;
+      flex-shrink: 0;
+    }
+  </style>
 
 </head>
 
 <body>
-  <canvas></canvas>
+  <div class="container">
+    <div class="container-health-bar">
+      <div class="health-bar">
+        <div class="health-bar-status" style="right: 0;" id="player-health"></div>
+      </div>
+      <div class="timer" id="timer"></div>
+      <div class="health-bar">
+        <div class="health-bar-status" style="left: 0;" id="enemy-health"></div>
+      </div>
+
+    </div>
+    <canvas></canvas>
+  </div>
+
   <script src="index.js"></script>
 </body>
+
 </html>
