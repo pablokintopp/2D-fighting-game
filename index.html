@@ -54,10 +54,27 @@
     }
 
     .timer {
-      background-color: yellowgreen;
+      background-color: darkmagenta;
       height: 100px;
       width: 100px;
       flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container-game-status {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: 500;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   </style>
 
@@ -69,11 +86,15 @@
       <div class="health-bar">
         <div class="health-bar-status" style="right: 0;" id="player-health"></div>
       </div>
-      <div class="timer" id="timer"></div>
+      <div class="timer" id="timer">
+        <span class="timer-content" id="timer-value">10</span>
+      </div>
       <div class="health-bar">
         <div class="health-bar-status" style="left: 0;" id="enemy-health"></div>
       </div>
-
+    </div>
+    <div class="container-game-status">
+      <span class="text-game-status" id="game-status-value" style="display: none;">Game Status</span>
     </div>
     <canvas></canvas>
   </div>

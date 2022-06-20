@@ -13,6 +13,8 @@ const jumpSpeed = 20
 
 const hitDamage = 10
 
+let gameOver = false
+
 class Sprite {
     constructor({ position, velocity, color = 'red', offset }) {
         this.position = position
@@ -118,6 +120,41 @@ const keys = {
     }
 }
 
+let timer = 10
+let timerTimeoutId
+function decreaseTimer() {
+    document.getElementById('timer-value').innerHTML = timer
+    if (timer > 0) {
+        timer--;
+        timerTimeoutId = setTimeout(decreaseTimer, 1000);
+    } else {
+        determineWinner();
+    }
+}
+
+function determineWinner() {
+    let status = ''
+    if (player.health === enemy.health) {
+        status = 'GAME TIED!'
+    } else if (player.health > enemy.health) {
+        status = 'PLAYER 1 WINS!'
+    } else {
+        status = 'PLAYER 2 WINS!'
+    }
+
+    document.getElementById('game-status-value').innerHTML = status
+    document.getElementById('game-status-value').style.display = 'block'
+
+    if (timer > 0 && timerTimeoutId) {
+        clearTimeout(timerTimeoutId)
+    }
+
+    gameOver = true
+
+}
+
+decreaseTimer()
+
 function detectCollisionBetweenRectangles({ rect1, rect2 }) {
     return (
         rect1.position.x + rect1.width >= rect2.position.x &&
@@ -128,42 +165,49 @@ function detectCollisionBetweenRectangles({ rect1, rect2 }) {
 
 function animate() {
     window.requestAnimationFrame(animate)
-    c.fillStyle = 'black'
-    c.fillRect(0, 0, canvas.width, canvas.height)
 
-    player.update()
-    enemy.update()
+    if (gameOver === false) {
+        c.fillStyle = 'black'
+        c.fillRect(0, 0, canvas.width, canvas.height)
 
-    player.velocity.x = 0
-    enemy.velocity.x = 0
+        player.update()
+        enemy.update()
 
-    if (keys.a.pressed && player.lastKey === 'a') {
-        player.velocity.x = -movementSpeed
-    } else if (keys.d.pressed && player.lastKey === 'd') {
-        player.velocity.x = movementSpeed
-    }
+        player.velocity.x = 0
+        enemy.velocity.x = 0
 
-    if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-        enemy.velocity.x = -movementSpeed
-    } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-        enemy.velocity.x = movementSpeed
-    }
+        if (keys.a.pressed && player.lastKey === 'a') {
+            player.velocity.x = -movementSpeed
+        } else if (keys.d.pressed && player.lastKey === 'd') {
+            player.velocity.x = movementSpeed
+        }
 
-    //detect for collision
-    if (player.isAttacking &&
-        detectCollisionBetweenRectangles({ rect1: player.attackBox, rect2: enemy })
-    ) {
-        player.isAttacking = false
-        enemy.health -= hitDamage
-        document.getElementById('enemy-health').style.width = `${enemy.health}%`
-    }
+        if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+            enemy.velocity.x = -movementSpeed
+        } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+            enemy.velocity.x = movementSpeed
+        }
 
-    if (enemy.isAttacking &&
-        detectCollisionBetweenRectangles({ rect1: enemy.attackBox, rect2: player })
-    ) {
-        enemy.isAttacking = false
-        player.health -= hitDamage
-        document.getElementById('player-health').style.width = `${player.health}%`
+        //detect for collision
+        if (player.isAttacking &&
+            detectCollisionBetweenRectangles({ rect1: player.attackBox, rect2: enemy })
+        ) {
+            player.isAttacking = false
+            enemy.health -= hitDamage
+            document.getElementById('enemy-health').style.width = `${enemy.health}%`
+        }
+
+        if (enemy.isAttacking &&
+            detectCollisionBetweenRectangles({ rect1: enemy.attackBox, rect2: player })
+        ) {
+            enemy.isAttacking = false
+            player.health -= hitDamage
+            document.getElementById('player-health').style.width = `${player.health}%`
+        }
+
+        if (player.health <= 0 || enemy.health <= 0) {
+            determineWinner()
+        }
     }
 
 }
