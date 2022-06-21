@@ -15,70 +15,16 @@ const hitDamage = 10
 
 let gameOver = false
 
-class Sprite {
-    constructor({ position, velocity, color = 'red', offset }) {
-        this.position = position
-        this.velocity = velocity
-        this.height = 150
-        this.width = 50
-        this.lastKey
-        this.isJumping
-        this.color = color
-        this.isAttacking = false
-        this.health = 100
-        this.attackBox = {
-            position: {
-                x: this.position.x,
-                y: this.position.y
-            },
-            offset,
-            width: 100,
-            height: 50
-        }
-    }
+const background = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    imageSrc: './img/background.png'
+})
 
-    draw() {
-        c.fillStyle = this.color
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
-        //atack box
-        if (this.isAttacking) {
-            c.fillStyle = 'green'
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-        }
-
-    }
-
-    update() {
-        this.draw()
-
-        this.position.y += this.velocity.y
-        this.position.x += this.velocity.x
-
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-        this.attackBox.position.y = this.position.y + this.attackBox.offset.y
-
-        if (this.position.y + this.velocity.y + this.height > canvas.height) {
-            this.velocity.y = 0
-            this.isJumping = false
-        } else {
-            this.isJumping = true
-            this.velocity.y += gravity
-        }
-    }
-
-    attack() {
-        if (this.isAttacking === false) {
-            this.isAttacking = true
-            setTimeout(() => {
-                this.isAttacking = false
-            }, 100)
-        }
-    }
-
-}
-
-const player = new Sprite({
+const player = new Fighter({
     position: {
         x: 0,
         y: 0
@@ -92,7 +38,7 @@ const player = new Sprite({
 })
 
 
-const enemy = new Sprite({
+const enemy = new Fighter({
     position: {
         x: 400,
         y: 100
@@ -120,48 +66,7 @@ const keys = {
     }
 }
 
-let timer = 10
-let timerTimeoutId
-function decreaseTimer() {
-    document.getElementById('timer-value').innerHTML = timer
-    if (timer > 0) {
-        timer--;
-        timerTimeoutId = setTimeout(decreaseTimer, 1000);
-    } else {
-        determineWinner();
-    }
-}
-
-function determineWinner() {
-    let status = ''
-    if (player.health === enemy.health) {
-        status = 'GAME TIED!'
-    } else if (player.health > enemy.health) {
-        status = 'PLAYER 1 WINS!'
-    } else {
-        status = 'PLAYER 2 WINS!'
-    }
-
-    document.getElementById('game-status-value').innerHTML = status
-    document.getElementById('game-status-value').style.display = 'block'
-
-    if (timer > 0 && timerTimeoutId) {
-        clearTimeout(timerTimeoutId)
-    }
-
-    gameOver = true
-
-}
-
 decreaseTimer()
-
-function detectCollisionBetweenRectangles({ rect1, rect2 }) {
-    return (
-        rect1.position.x + rect1.width >= rect2.position.x &&
-        rect1.position.x <= rect2.position.x + rect2.width &&
-        rect1.position.y + rect1.height >= rect2.position.y &&
-        rect1.position.y <= rect2.position.y + rect2.height)
-}
 
 function animate() {
     window.requestAnimationFrame(animate)
@@ -170,6 +75,7 @@ function animate() {
         c.fillStyle = 'black'
         c.fillRect(0, 0, canvas.width, canvas.height)
 
+        background.update()
         player.update()
         enemy.update()
 
