@@ -46,7 +46,17 @@ const player = new Fighter({
     imageSrc: './img/samuraiMack/Idle.png',
     framesMax: 8,
     scale: 2.5,
-    offset: { x: 215, y: 157 }
+    offset: { x: 215, y: 157 },
+    sprites: {
+        idle: {
+            imageSrc: './img/samuraiMack/Idle.png',
+            framesMax: 8
+        },
+        run: {
+            imageSrc: './img/samuraiMack/Run.png',
+            framesMax: 8
+        }
+    }
 })
 
 
@@ -62,7 +72,17 @@ const enemy = new Fighter({
     imageSrc: './img/samuraiMack/Idle.png',
     framesMax: 8,
     scale: 2.5,
-    offset: { x: 215, y: 157 }
+    offset: { x: 215, y: 157 },
+    sprites: {
+        idle: {
+            imageSrc: './img/samuraiMack/Idle.png',
+            framesMax: 8
+        },
+        run: {
+            imageSrc: './img/samuraiMack/Run.png',
+            framesMax: 8
+        }
+    }
 })
 
 const keys = {
@@ -97,16 +117,23 @@ function animate() {
         player.velocity.x = 0
         enemy.velocity.x = 0
 
+        player.image = player.sprites.idle.image
+        enemy.image = enemy.sprites.idle.image
+
         if (keys.a.pressed && player.lastKey === 'a') {
+            player.image = player.sprites.run.image
             player.velocity.x = -movementSpeed
         } else if (keys.d.pressed && player.lastKey === 'd') {
+            player.image = player.sprites.run.image
             player.velocity.x = movementSpeed
         }
 
         if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+            enemy.image = enemy.sprites.run.image
             enemy.velocity.x = -movementSpeed
         } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
             enemy.velocity.x = movementSpeed
+            enemy.image = enemy.sprites.run.image
         }
 
         //detect for collision
