@@ -1,5 +1,5 @@
 class Sprite {
-    constructor({ position, imageSrc, scale = 1, framesMax = 1 }) {
+    constructor({ position, imageSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 } }) {
         this.position = position
         this.height = 150
         this.width = 50
@@ -10,6 +10,7 @@ class Sprite {
         this.framesCurrent = 0
         this.framesElapsed = 0
         this.framesHold = 5
+        this.offset = offset
     }
 
     draw() {
@@ -19,14 +20,13 @@ class Sprite {
             0,
             this.image.width / this.framesMax,
             this.image.height,
-            this.position.x,
-            this.position.y,
+            this.position.x - this.offset.x,
+            this.position.y - this.offset.y,
             (this.image.width / this.framesMax) * this.scale,
             this.image.height * this.scale)
     }
 
-    update() {
-        this.draw()
+    animateFrames() {
         this.framesElapsed++
 
         if (this.framesElapsed >= this.framesHold) {
@@ -35,10 +35,30 @@ class Sprite {
         }
     }
 
+    update() {
+        this.draw()
+        this.animateFrames()
+    }
+
 }
-class Fighter {
-    constructor({ position, velocity, color = 'red', offset }) {
-        this.position = position
+class Fighter extends Sprite {
+    constructor({
+        position,
+        velocity,
+        color = 'red',
+        offset = { x: 0, y: 0 },
+        imageSrc,
+        scale = 1,
+        framesMax = 1
+    }) {
+        super({
+            position,
+            imageSrc,
+            scale,
+            framesMax,
+            offset
+        })
+
         this.velocity = velocity
         this.height = 150
         this.width = 50
@@ -56,22 +76,22 @@ class Fighter {
             width: 100,
             height: 50
         }
+        this.framesCurrent = 0
+        this.framesElapsed = 0
+        this.framesHold = 5
     }
 
-    draw() {
-        c.fillStyle = this.color
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-
-        //atack box
-        if (this.isAttacking) {
-            c.fillStyle = 'green'
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-        }
-
-    }
+    // draw() { 
+    //     //atack box
+    //     if (this.isAttacking) {
+    //         c.fillStyle = 'green'
+    //         c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+    //     }
+    // }
 
     update() {
         this.draw()
+        this.animateFrames()
 
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x
