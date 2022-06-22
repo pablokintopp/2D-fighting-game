@@ -132,4 +132,12 @@ class Fighter extends Sprite {
         }
     }
 
+    setCurrentSprite(sprite) {
+        if (this.image !== sprite.image) {
+            this.image = sprite.image
+            this.framesMax = sprite.framesMax
+            this.framesCurrent = 0
+        }
+    }
+
 }
