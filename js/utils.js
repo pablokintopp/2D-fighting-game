@@ -28,8 +28,6 @@ function determineWinner() {
         clearTimeout(timerTimeoutId)
     }
 
-    gameOver = true
-
 }
 
 function detectCollisionBetweenRectangles({ rect1, rect2 }) {

@@ -82,6 +82,7 @@ class Fighter extends Sprite {
         this.framesElapsed = 0
         this.framesHold = 5
         this.sprites = sprites
+        this.dead = false
 
         for (let sprite in this.sprites) {
             sprites[sprite].image = new Image()
@@ -91,9 +92,10 @@ class Fighter extends Sprite {
 
     update() {
         this.draw()
-        this.animateFrames()
 
-
+        if (this.dead === false) {
+            this.animateFrames()
+        }
 
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x
@@ -122,12 +124,28 @@ class Fighter extends Sprite {
 
     takeHit(damage) {
         this.health -= damage
-        this.setCurrentSprite(this.sprites.takeHit)
+
+        if (this.health > 0) {
+            this.setCurrentSprite(this.sprites.takeHit)
+        } else {
+            this.setCurrentSprite(this.sprites.death)
+        }
+
     }
 
     setCurrentSprite(sprite) {
-        if ((this.image === this.sprites.attack1.image && this.framesCurrent < this.sprites.attack1.framesMax - 1) ||
-            (this.image === this.sprites.takeHit.image && this.framesCurrent < this.sprites.takeHit.framesMax - 1))
+
+        if (this.image === this.sprites.death.image) {
+            if (this.framesCurrent >= this.sprites.death.framesMax - 1) {
+                this.dead = true
+            }
+            return
+        }
+
+        if (
+            (this.image === this.sprites.attack1.image && this.framesCurrent < this.sprites.attack1.framesMax - 1) ||
+            (this.image === this.sprites.takeHit.image && this.framesCurrent < this.sprites.takeHit.framesMax - 1)
+        )
             return
 
         if (this.image !== sprite.image) {
