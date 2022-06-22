@@ -1,5 +1,5 @@
 
-let timer = 10
+let timer = 100
 let timerTimeoutId
 function decreaseTimer() {
     document.getElementById('timer-value').innerHTML = timer

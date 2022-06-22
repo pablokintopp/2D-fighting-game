@@ -55,7 +55,24 @@ const player = new Fighter({
         run: {
             imageSrc: './img/samuraiMack/Run.png',
             framesMax: 8
+        },
+        jump: {
+            imageSrc: './img/samuraiMack/Jump.png',
+            framesMax: 2
+        },
+        fall: {
+            imageSrc: './img/samuraiMack/Fall.png',
+            framesMax: 2
+        },
+        attack1: {
+            imageSrc: './img/samuraiMack/Attack1.png',
+            framesMax: 6
         }
+    },
+    attackBox: {
+        offset: { x: 60, y: 10 },
+        width: 170,
+        height: 90
     }
 })
 
@@ -69,19 +86,36 @@ const enemy = new Fighter({
         x: 0,
         y: 0
     },
-    imageSrc: './img/samuraiMack/Idle.png',
+    imageSrc: './img/kenji/Idle.png',
     framesMax: 8,
     scale: 2.5,
-    offset: { x: 215, y: 157 },
+    offset: { x: 215, y: 167 },
     sprites: {
         idle: {
-            imageSrc: './img/samuraiMack/Idle.png',
-            framesMax: 8
+            imageSrc: './img/kenji/Idle.png',
+            framesMax: 4
         },
         run: {
-            imageSrc: './img/samuraiMack/Run.png',
+            imageSrc: './img/kenji/Run.png',
             framesMax: 8
+        },
+        jump: {
+            imageSrc: './img/kenji/Jump.png',
+            framesMax: 2
+        },
+        fall: {
+            imageSrc: './img/kenji/Fall.png',
+            framesMax: 2
+        },
+        attack1: {
+            imageSrc: './img/kenji/Attack1.png',
+            framesMax: 4
         }
+    },
+    attackBox: {
+        offset: { x: -150, y: 30 },
+        width: 170,
+        height: 90
     }
 })
 
@@ -117,40 +151,56 @@ function animate() {
         player.velocity.x = 0
         enemy.velocity.x = 0
 
-        player.image = player.sprites.idle.image
-        enemy.image = enemy.sprites.idle.image
-
         if (keys.a.pressed && player.lastKey === 'a') {
-            player.image = player.sprites.run.image
+            player.setCurrentSprite(player.sprites.run)
             player.velocity.x = -movementSpeed
         } else if (keys.d.pressed && player.lastKey === 'd') {
-            player.image = player.sprites.run.image
+            player.setCurrentSprite(player.sprites.run)
             player.velocity.x = movementSpeed
+        } else {
+            player.setCurrentSprite(player.sprites.idle)
+        }
+
+        if (player.velocity.y < 0) {
+            player.setCurrentSprite(player.sprites.jump);
+        } else if (player.velocity.y > 0) {
+            player.setCurrentSprite(player.sprites.fall);
         }
 
         if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-            enemy.image = enemy.sprites.run.image
+            enemy.setCurrentSprite(enemy.sprites.run)
             enemy.velocity.x = -movementSpeed
         } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
             enemy.velocity.x = movementSpeed
-            enemy.image = enemy.sprites.run.image
+            enemy.setCurrentSprite(enemy.sprites.run)
+        } else {
+            enemy.setCurrentSprite(enemy.sprites.idle)
         }
 
-        //detect for collision
-        if (player.isAttacking &&
-            detectCollisionBetweenRectangles({ rect1: player.attackBox, rect2: enemy })
+        if (enemy.velocity.y < 0) {
+            enemy.setCurrentSprite(enemy.sprites.jump);
+        } else if (enemy.velocity.y > 0) {
+            enemy.setCurrentSprite(enemy.sprites.fall);
+        }
+
+        //Detect attack player one
+        if (player.isAttacking && player.framesCurrent === 4 // frame 4 is when the player 1 draws his sword            
         ) {
             player.isAttacking = false
-            enemy.health -= hitDamage
-            document.getElementById('enemy-health').style.width = `${enemy.health}%`
+            if (detectCollisionBetweenRectangles({ rect1: player.attackBox, rect2: enemy })) {
+                enemy.health -= hitDamage
+                document.getElementById('enemy-health').style.width = `${enemy.health}%`
+            }
         }
 
-        if (enemy.isAttacking &&
-            detectCollisionBetweenRectangles({ rect1: enemy.attackBox, rect2: player })
+        if (enemy.isAttacking && enemy.framesCurrent === 2 // frame 2 is when the player 2 draws his sword            
         ) {
             enemy.isAttacking = false
-            player.health -= hitDamage
-            document.getElementById('player-health').style.width = `${player.health}%`
+            if (detectCollisionBetweenRectangles({ rect1: enemy.attackBox, rect2: player })) {
+                player.health -= hitDamage
+                document.getElementById('player-health').style.width = `${player.health}%`
+            }
+
         }
 
         if (player.health <= 0 || enemy.health <= 0) {

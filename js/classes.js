@@ -50,7 +50,8 @@ class Fighter extends Sprite {
         imageSrc,
         scale = 1,
         framesMax = 1,
-        sprites
+        sprites,
+        attackBox = { offset: {}, width: undefined, height: undefined }
     }) {
         super({
             position,
@@ -73,9 +74,9 @@ class Fighter extends Sprite {
                 x: this.position.x,
                 y: this.position.y
             },
-            offset,
-            width: 100,
-            height: 50
+            offset: attackBox.offset,
+            width: attackBox.width,
+            height: attackBox.height
         }
         this.framesCurrent = 0
         this.framesElapsed = 0
@@ -88,17 +89,11 @@ class Fighter extends Sprite {
         }
     }
 
-    // draw() { 
-    //     //atack box
-    //     if (this.isAttacking) {
-    //         c.fillStyle = 'green'
-    //         c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-    //     }
-    // }
-
     update() {
         this.draw()
         this.animateFrames()
+
+
 
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x
@@ -106,8 +101,11 @@ class Fighter extends Sprite {
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x
         this.attackBox.position.y = this.position.y + this.attackBox.offset.y
 
+        //c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+
         if (this.position.y + this.velocity.y + this.height > canvas.height - 96) {
             this.velocity.y = 0
+            this.position.y = 331 // ground
             this.isJumping = false
         } else {
             this.isJumping = true
@@ -117,10 +115,20 @@ class Fighter extends Sprite {
 
     attack() {
         if (this.isAttacking === false) {
+            this.setCurrentSprite(this.sprites.attack1)
             this.isAttacking = true
-            setTimeout(() => {
-                this.isAttacking = false
-            }, 100)
+        }
+    }
+
+    setCurrentSprite(sprite) {
+        if (this.image === this.sprites.attack1.image && this.framesCurrent < this.sprites.attack1.framesMax - 1)
+            return
+
+        if (this.image !== sprite.image) {
+            this.image = sprite.image
+            this.framesMax = sprite.framesMax
+            this.framesCurrent = 0
+            this.frameAutoRestart = sprite.frameAutoRestart
         }
     }
 
