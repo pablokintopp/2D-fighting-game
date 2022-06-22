@@ -63,13 +63,10 @@ const player = new Fighter({
         fall: {
             imageSrc: './img/samuraiMack/Fall.png',
             framesMax: 2
-<<<<<<< HEAD
         },
         attack1: {
             imageSrc: './img/samuraiMack/Attack1.png',
             framesMax: 6
-=======
->>>>>>> 319428fde4f4c07870b94b8f650540076cfc6289
         }
     },
     attackBox: {
@@ -103,7 +100,6 @@ const enemy = new Fighter({
             framesMax: 8
         },
         jump: {
-<<<<<<< HEAD
             imageSrc: './img/kenji/Jump.png',
             framesMax: 2
         },
@@ -114,14 +110,6 @@ const enemy = new Fighter({
         attack1: {
             imageSrc: './img/kenji/Attack1.png',
             framesMax: 4
-=======
-            imageSrc: './img/samuraiMack/Jump.png',
-            framesMax: 2
-        },
-        fall: {
-            imageSrc: './img/samuraiMack/Fall.png',
-            framesMax: 2
->>>>>>> 319428fde4f4c07870b94b8f650540076cfc6289
         }
     },
     attackBox: {
@@ -163,12 +151,6 @@ function animate() {
         player.velocity.x = 0
         enemy.velocity.x = 0
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 319428fde4f4c07870b94b8f650540076cfc6289
         if (keys.a.pressed && player.lastKey === 'a') {
             player.setCurrentSprite(player.sprites.run)
             player.velocity.x = -movementSpeed
@@ -193,15 +175,6 @@ function animate() {
             enemy.setCurrentSprite(enemy.sprites.run)
         } else {
             enemy.setCurrentSprite(enemy.sprites.idle)
-<<<<<<< HEAD
-=======
-        }
-
-        if (enemy.velocity.y < 0) {
-            enemy.setCurrentSprite(enemy.sprites.jump);
-        } else if (player.velocity.y > 0) {
-            enemy.setCurrentSprite(enemy.sprites.fall);
->>>>>>> 319428fde4f4c07870b94b8f650540076cfc6289
         }
 
         if (enemy.velocity.y < 0) {
