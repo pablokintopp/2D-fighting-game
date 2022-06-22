@@ -20,10 +20,17 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
   <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
   <style>
     * {
       box-sizing: border-box;
+      font-family: 'VT323', monospace;
+      color: white;
+      font-size: 1.2em;
     }
 
     .container {
@@ -40,28 +47,31 @@
     }
 
     .health-bar {
-      background-color: yellow;
-      height: 30px;
+      background-color: #b91c1c;
       width: 100%;
+      height: 30px;
       position: relative;
+      border: 4px solid white;
     }
 
     .health-bar-status {
-      background-color: blue;
-      height: 30px;
+      background-color: #60a5fa;
+      height: 100%;
       width: 100%;
       position: absolute;
+
     }
 
     .timer {
-      background-color: darkmagenta;
-      height: 100px;
+      background-color: #262626;
+      height: 50px;
       width: 100px;
       flex-shrink: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       color: white;
+      border: 4px solid white;
     }
 
     .container-game-status {
@@ -83,13 +93,13 @@
 <body>
   <div class="container">
     <div class="container-health-bar">
-      <div class="health-bar">
+      <div class="health-bar" style="border-right: none;">
         <div class="health-bar-status" style="right: 0;" id="player-health"></div>
       </div>
       <div class="timer" id="timer">
         <span class="timer-content" id="timer-value">10</span>
       </div>
-      <div class="health-bar">
+      <div class="health-bar" style="border-left: none;">
         <div class="health-bar-status" style="left: 0;" id="enemy-health"></div>
       </div>
     </div>
