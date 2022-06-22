@@ -108,6 +108,7 @@ class Fighter extends Sprite {
 
         if (this.position.y + this.velocity.y + this.height > canvas.height - 96) {
             this.velocity.y = 0
+            this.position.y = 331 // ground
             this.isJumping = false
         } else {
             this.isJumping = true
@@ -121,6 +122,14 @@ class Fighter extends Sprite {
             setTimeout(() => {
                 this.isAttacking = false
             }, 100)
+        }
+    }
+
+    setCurrentSprite(sprite) {
+        if (this.image !== sprite.image) {
+            this.image = sprite.image
+            this.framesMax = sprite.framesMax
+            this.framesCurrent = 0
         }
     }
 

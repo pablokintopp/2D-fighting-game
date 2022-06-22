@@ -55,6 +55,14 @@ const player = new Fighter({
         run: {
             imageSrc: './img/samuraiMack/Run.png',
             framesMax: 8
+        },
+        jump: {
+            imageSrc: './img/samuraiMack/Jump.png',
+            framesMax: 2
+        },
+        fall: {
+            imageSrc: './img/samuraiMack/Fall.png',
+            framesMax: 2
         }
     }
 })
@@ -81,6 +89,14 @@ const enemy = new Fighter({
         run: {
             imageSrc: './img/samuraiMack/Run.png',
             framesMax: 8
+        },
+        jump: {
+            imageSrc: './img/samuraiMack/Jump.png',
+            framesMax: 2
+        },
+        fall: {
+            imageSrc: './img/samuraiMack/Fall.png',
+            framesMax: 2
         }
     }
 })
@@ -117,23 +133,39 @@ function animate() {
         player.velocity.x = 0
         enemy.velocity.x = 0
 
-        player.image = player.sprites.idle.image
-        enemy.image = enemy.sprites.idle.image
+
+
 
         if (keys.a.pressed && player.lastKey === 'a') {
-            player.image = player.sprites.run.image
+            player.setCurrentSprite(player.sprites.run)
             player.velocity.x = -movementSpeed
         } else if (keys.d.pressed && player.lastKey === 'd') {
-            player.image = player.sprites.run.image
+            player.setCurrentSprite(player.sprites.run)
             player.velocity.x = movementSpeed
+        } else {
+            player.setCurrentSprite(player.sprites.idle)
+        }
+
+        if (player.velocity.y < 0) {
+            player.setCurrentSprite(player.sprites.jump);
+        } else if (player.velocity.y > 0) {
+            player.setCurrentSprite(player.sprites.fall);
         }
 
         if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-            enemy.image = enemy.sprites.run.image
+            enemy.setCurrentSprite(enemy.sprites.run)
             enemy.velocity.x = -movementSpeed
         } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
             enemy.velocity.x = movementSpeed
-            enemy.image = enemy.sprites.run.image
+            enemy.setCurrentSprite(enemy.sprites.run)
+        } else {
+            enemy.setCurrentSprite(enemy.sprites.idle)
+        }
+
+        if (enemy.velocity.y < 0) {
+            enemy.setCurrentSprite(enemy.sprites.jump);
+        } else if (player.velocity.y > 0) {
+            enemy.setCurrentSprite(enemy.sprites.fall);
         }
 
         //detect for collision
