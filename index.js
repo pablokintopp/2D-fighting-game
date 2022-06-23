@@ -85,7 +85,7 @@ const player = new Fighter({
 
 const enemy = new Fighter({
     position: {
-        x: 400,
+        x: 800,
         y: 100
     },
     velocity: {
@@ -267,7 +267,7 @@ window.addEventListener('keydown', (ev) => {
             case ' ':
                 player.attack()
                 break
-            case 'Control':
+            case 'ArrowDown':
                 enemy.attack()
                 break
 
