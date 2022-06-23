@@ -34,7 +34,7 @@ const shop = new Sprite({
 
 const player = new Fighter({
     position: {
-        x: 0,
+        x: 100,
         y: 0
     },
     velocity: {
@@ -264,7 +264,7 @@ window.addEventListener('keydown', (ev) => {
                     enemy.velocity.y = -jumpSpeed
                 }
                 break
-            case ' ':
+            case 's':
                 player.attack()
                 break
             case 'ArrowDown':
